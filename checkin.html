@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Check-in sự kiện</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Menu chung, vẽ bởi renderTopbar() trong js/common.js -->
+  <header id="topbar" class="topbar"></header>
+
+  <main class="container page">
+    <!-- Đang kiểm tra phiên đăng nhập -->
+    <div id="loading-view" class="card state-msg">Đang tải…</div>
+
+    <!-- Đăng nhập -->
+    <section id="login-view" hidden>
+      <div class="card form-wrap narrow">
+        <h2 class="card-title">Đăng nhập nhân viên</h2>
+        <form id="login-form" novalidate>
+          <div class="form-error" id="login-error" role="alert" hidden></div>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" autocomplete="username" inputmode="email" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Mật khẩu</label>
+            <input id="login-password" type="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" class="btn btn-block" id="login-btn">Đăng nhập</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Check-in -->
+    <section id="app-view" hidden>
+      <div class="card stack">
+        <div class="field no-margin">
+          <label for="event-select">Sự kiện</label>
+          <select id="event-select"></select>
+        </div>
+        <div class="counter">
+          <div class="counter-numbers">
+            <span class="counter-main" id="count-in">0</span>
+            <span class="counter-sep">/</span>
+            <span id="count-total">0</span>
+            <span class="counter-label">đã có mặt</span>
+          </div>
+          <div class="progress"><div class="progress-bar" id="count-bar"></div></div>
+        </div>
+      </div>
+
+      <div class="card stack">
+        <div id="reader" class="reader" hidden></div>
+        <div id="camera-placeholder" class="camera-placeholder">
+          Bấm “Bật camera” rồi đưa mã QR trên vé vào khung hình.
+        </div>
+        <div class="form-error" id="camera-error" role="alert" hidden></div>
+        <button type="button" class="btn btn-block" id="camera-btn">Bật camera</button>
+        <div class="last-result" id="last-result" hidden></div>
+      </div>
+
+      <div class="card stack">
+        <div class="field no-margin">
+          <label for="search-input">Check-in thủ công</label>
+          <input id="search-input" type="search" placeholder="Nhập tên hoặc số điện thoại…" autocomplete="off">
+        </div>
+        <div id="search-results" class="search-results"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Khung kết quả toàn màn hình -->
+  <div id="result-overlay" class="result-overlay" hidden>
+    <div class="result-box">
+      <div class="result-icon" id="result-icon"></div>
+      <div class="result-title" id="result-title"></div>
+      <div class="result-name" id="result-name"></div>
+      <div class="result-org" id="result-org"></div>
+      <div class="result-detail" id="result-detail"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/checkin.js"></script>
+</body>
+</html>

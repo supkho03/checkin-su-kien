@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quản trị sự kiện</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Menu chung, vẽ bởi renderTopbar() trong js/common.js -->
+  <header id="topbar" class="topbar"></header>
+
+  <main class="container page page-wide">
+    <div id="loading-view" class="card state-msg">Đang tải…</div>
+
+    <!-- Đăng nhập -->
+    <section id="login-view" hidden>
+      <div class="card form-wrap narrow">
+        <h2 class="card-title">Đăng nhập nhân viên</h2>
+        <form id="login-form" novalidate>
+          <div class="form-error" id="login-error" role="alert" hidden></div>
+          <div class="field">
+            <label for="login-email">Email</label>
+            <input id="login-email" type="email" autocomplete="username" inputmode="email" required>
+          </div>
+          <div class="field">
+            <label for="login-password">Mật khẩu</label>
+            <input id="login-password" type="password" autocomplete="current-password" required>
+          </div>
+          <button type="submit" class="btn btn-block" id="login-btn">Đăng nhập</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="app-view" hidden>
+      <!-- Danh sách sự kiện -->
+      <div class="card">
+        <div class="section-head">
+          <h2 class="card-title">Sự kiện</h2>
+          <button type="button" class="btn btn-sm" id="add-event-btn">+ Thêm sự kiện</button>
+        </div>
+        <div id="events-list" class="event-list"><p class="muted">Đang tải…</p></div>
+      </div>
+
+      <!-- Người đăng ký của sự kiện đang chọn -->
+      <div class="card" id="reg-section" hidden>
+        <div class="section-head">
+          <div>
+            <div class="muted small">Người đăng ký</div>
+            <h2 class="card-title" id="reg-title"></h2>
+          </div>
+          <div class="head-actions">
+            <button type="button" class="btn btn-light btn-sm" id="refresh-btn">Làm mới</button>
+            <button type="button" class="btn btn-sm" id="export-btn">Xuất CSV</button>
+          </div>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-label">Tổng đăng ký</div>
+            <div class="stat-value" id="stat-total">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Đã có mặt</div>
+            <div class="stat-value stat-success" id="stat-in">0</div>
+          </div>
+          <div class="stat">
+            <div class="stat-label">Tỷ lệ có mặt</div>
+            <div class="stat-value" id="stat-rate">0%</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input type="search" id="reg-search" placeholder="Tìm tên, email, SĐT, đơn vị…" autocomplete="off">
+          <select id="reg-filter" aria-label="Lọc trạng thái">
+            <option value="all">Tất cả</option>
+            <option value="in">Đã có mặt</option>
+            <option value="out">Chưa có mặt</option>
+          </select>
+        </div>
+
+        <div class="muted small" id="reg-count"></div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>Số điện thoại</th>
+                <th>Đơn vị</th>
+                <th>Đăng ký lúc</th>
+                <th>Trạng thái</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="reg-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Hộp thoại thêm/sửa sự kiện -->
+  <dialog id="event-dialog" class="dialog">
+    <form id="event-form" novalidate>
+      <h2 class="card-title" id="dialog-title">Thêm sự kiện</h2>
+      <div class="form-error" id="event-error" role="alert" hidden></div>
+
+      <div class="field">
+        <label for="ev-name">Tên sự kiện <span class="req">*</span></label>
+        <input id="ev-name" type="text" maxlength="200" required>
+      </div>
+      <div class="field">
+        <label for="ev-date">Thời gian <span class="req">*</span></label>
+        <input id="ev-date" type="datetime-local" required>
+      </div>
+      <div class="field">
+        <label for="ev-location">Địa điểm</label>
+        <input id="ev-location" type="text" maxlength="300">
+      </div>
+      <div class="field">
+        <label for="ev-description">Mô tả</label>
+        <textarea id="ev-description" rows="4" maxlength="5000"></textarea>
+      </div>
+      <label class="check">
+        <input id="ev-open" type="checkbox" checked>
+        <span>Mở đăng ký</span>
+      </label>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-light" id="cancel-event-btn">Huỷ</button>
+        <button type="submit" class="btn" id="save-event-btn">Lưu</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

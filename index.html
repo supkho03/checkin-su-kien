@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Đăng ký sự kiện</title>
+  <meta name="description" content="Đăng ký tham dự sự kiện và nhận vé QR">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1>Đăng ký sự kiện</h1>
+      <p>Chọn sự kiện, điền thông tin và nhận vé QR ngay.</p>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- 1. Danh sách sự kiện -->
+    <section id="events-view">
+      <div id="events-state" class="card state-msg">Đang tải danh sách sự kiện…</div>
+      <div id="event-grid" class="event-grid" hidden></div>
+    </section>
+
+    <!-- 2. Form đăng ký -->
+    <section id="form-view" hidden>
+      <div class="card form-wrap">
+        <button type="button" class="link-back" id="back-to-list">← Chọn sự kiện khác</button>
+
+        <div class="event-summary" id="event-summary"></div>
+
+        <form id="register-form" novalidate>
+          <div class="form-error" id="form-error" role="alert" hidden></div>
+
+          <div class="field">
+            <label for="full_name">Họ và tên <span class="req">*</span></label>
+            <input id="full_name" name="full_name" type="text" autocomplete="name" maxlength="150" required>
+            <div class="error"></div>
+          </div>
+
+          <div class="field">
+            <label for="email">Email <span class="req">*</span></label>
+            <input id="email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="254" required>
+            <div class="error"></div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Số điện thoại <span class="req">*</span></label>
+            <input id="phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" maxlength="20" placeholder="VD: 0912 345 678" required>
+            <div class="error"></div>
+          </div>
+
+          <div class="field">
+            <label for="organization">Đơn vị <span class="hint">(không bắt buộc)</span></label>
+            <input id="organization" name="organization" type="text" autocomplete="organization" maxlength="200">
+            <div class="error"></div>
+          </div>
+
+          <button type="submit" class="btn btn-block" id="submit-btn">Đăng ký</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 3. Vé -->
+    <section id="ticket-view" hidden>
+      <div class="ticket-wrap">
+        <div class="alert alert-warning" role="alert">
+          <strong>Đăng ký thành công!</strong> Vé chỉ hiển thị <strong>một lần</strong>.
+          Hãy bấm <strong>“Tải vé”</strong> hoặc <strong>chụp màn hình</strong> ngay để xuất trình khi check-in.
+        </div>
+
+        <article class="ticket" id="ticket">
+          <div class="ticket-head">
+            <div class="ticket-label">VÉ THAM DỰ</div>
+            <h2 id="t-event"></h2>
+            <div class="meta">
+              <div id="t-date"></div>
+              <div id="t-location"></div>
+            </div>
+          </div>
+          <div class="ticket-cut"><span></span><span></span></div>
+          <div class="ticket-body">
+            <div class="small-label">HỌ VÀ TÊN</div>
+            <div class="ticket-name" id="t-name"></div>
+            <p class="ticket-org" id="t-org"></p>
+            <img class="ticket-qr" id="t-qr" alt="Mã QR vé tham dự">
+            <div class="ticket-code" id="t-code"></div>
+            <p class="ticket-note">Xuất trình mã QR này tại quầy check-in</p>
+          </div>
+        </article>
+
+        <div class="ticket-actions">
+          <button type="button" class="btn btn-block" id="download-btn">Tải vé (PNG)</button>
+          <button type="button" class="btn btn-light btn-block" id="done-btn">Về danh sách sự kiện</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">© Ban tổ chức sự kiện</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.4.4/build/qrcode.min.js"></script>
+  <script src="config.js"></script>
+  <script src="js/common.js"></script>
+  <script src="js/index.js"></script>
+</body>
+</html>
